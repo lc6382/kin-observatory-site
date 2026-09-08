@@ -1,0 +1,15 @@
+(()=>{
+'use strict';
+const endpoint='https://kin-observatory-events.bobbett.chatgpt.site/api/events';
+const $=id=>document.getElementById(id);let rows=[],editing=null,busy=false;
+async function request(method,value){const r=await fetch(endpoint,{method,cache:'no-store',...(value?{headers:{'Content-Type':'application/json'},body:JSON.stringify(value)}:{})});let data;try{data=await r.json();}catch{throw Error('Events are temporarily unavailable. Please try again.');}if(!r.ok)throw Error(data.error||'Could not save the event. Please try again.');return data;}
+function localTime(at){const d=new Date(at),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;}
+function open(event){if(busy)return;editing=event?{...event}:null;$('eventForm').reset();$('eventFormTitle').textContent=event?'Edit event':'Add event';$('eventLabel').value=event?.label||'';$('eventAt').value=localTime(event?.at||Date.now());$('eventType').value=event?.type||'other';$('eventNotes').value=event?.notes||'';$('eventMessage').textContent='';$('eventDialog').showModal();$('eventLabel').focus();}
+window.EventEditor={async fetchEvents(){const result=await request('GET');if(!Array.isArray(result))throw Error('Could not read events.');rows=result;return result;}};
+$('eventTimezone').textContent='Time zone: '+Intl.DateTimeFormat().resolvedOptions().timeZone.replaceAll('_',' ');
+$('addEvent').onclick=()=>open(null);$('cancelEvent').onclick=()=>{if(!busy)$('eventDialog').close();};
+$('eventDialog').addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+$('eventForm').onsubmit=async e=>{e.preventDefault();if(busy)return;const date=new Date($('eventAt').value);if(!Number.isFinite(+date)){ $('eventMessage').textContent='Choose a valid date and time.';return; }busy=true;$('saveEvent').disabled=true;$('saveEvent').textContent='Saving…';$('eventMessage').textContent='';try{await request(editing?'PATCH':'POST',{id:editing?.id||crypto.randomUUID(),...(editing?{version:editing.version}:{}),at:date.toISOString(),label:$('eventLabel').value,type:$('eventType').value,notes:$('eventNotes').value});$('eventDialog').close();$('eventFeedback').textContent='Event saved. It is visible to everyone.';await window.refreshKinEvents();}catch(error){$('eventMessage').textContent=error.message;}finally{busy=false;$('saveEvent').disabled=false;$('saveEvent').textContent='Save event';}};
+$('events').addEventListener('click',async e=>{const b=e.target.closest('[data-event-action]');if(!b||busy)return;const event=rows.find(r=>r.id===b.dataset.eventId);if(!event)return;if(b.dataset.eventAction==='edit'){open(event);return;}if(!confirm(`Delete “${event.label}”?`))return;busy=true;b.disabled=true;try{await request('DELETE',{id:event.id,version:event.version});$('eventFeedback').textContent='Event deleted.';await window.refreshKinEvents();}catch(error){$('eventFeedback').textContent=error.message;b.disabled=false;}finally{busy=false;}});
+})();
+

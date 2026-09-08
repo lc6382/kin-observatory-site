@@ -1,6 +1,8 @@
-{
-  "at": "2026-09-07T17:00:00-07:00",
-  "label": "BG blur",
-  "type": "Background",
-  "notes": "Removed blur"
-}[]
+[
+  {
+    "at": "2026-09-07T17:00:00-07:00",
+    "label": "BG blur",
+    "type": "background",
+    "notes": "Removed blur"
+  }
+]

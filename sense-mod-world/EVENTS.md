@@ -1,20 +1,5 @@
 # Sense Mod World events
 
-Edit [events.json](https://github.com/lc6382/kin-observatory-site/edit/main/sense-mod-world/events.json) while signed in to your GitHub account. Only accounts with repository write access can save changes. The public site cannot add or change events. The collector updates history.json only and preserves this file.
+Use **Add event** on the Sense Mod World webpage. Choose a name, date/time, category and optional notes, then Save event. Times use your device's displayed timezone and are stored as UTC. Edit and Delete appear beside each event. No GitHub sign-in is required.
 
-Start with this format (example only):
-
-```json
-[
-  {
-    "at": "2026-09-06T17:00:00-07:00",
-    "label": "Advertising campaign",
-    "type": "advertising",
-    "notes": "Optional description."
-  }
-]
-```
-
-Use your event's actual date/time with an explicit UTC offset. Pacific daylight time uses -07:00; Pacific standard time uses -08:00. `type` is advertising, model, update, or other. `label` and `at` are required; notes and type are optional. Multiple objects are separated with commas; don't add a comma after the last object. Keep notes suitable for public viewing. Commit to main and allow GitHub Pages a minute to publish, then refresh the page.
-
-Markers appear within the selected chart range. All events remain in the timeline even if outside the chart range. An invalid event is omitted with a visible warning; invalid JSON shows an error rather than pretending the timeline is empty. To remove an event, delete its object and adjust commas; to clear all events restore `[]`.
+Events are shared publicly and anyone visiting the page can edit them, as requested by the owner. Shared storage is the Sites D1 event service, not this legacy events.json file. Deleted records are retained privately in the database for recovery. The collector and statistics are separate from event editing. Concurrent stale edits are rejected with a refresh message.
