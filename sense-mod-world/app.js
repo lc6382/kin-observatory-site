@@ -1,7 +1,7 @@
 (()=>{'use strict';const $=id=>document.getElementById(id),DAY=86400000,GAP=18*3600000;
-const kins=[['YCF2R','Sense Mod World','#b8e6c0'],['RKH4I','Pam','#c4a1db'],['1MH1D','NPC','#7faecc'],['TWHFG','Shadow','#e0b880'],['78ZO7','Natalie & Darius','#d7939e'],['4XDPE','Missy','#a6b9e5'],['6YMWL','Derek Hawk','#ef9675'],['P74I0','Lyla','#70c9c2']];
+const kins=[['YCF2R','Sense Mod World','#b8e6c0'],['1MH1D','NPC','#7faecc'],['1EWDR','Emilio Vargas','#e0b880'],['A2VGO','Vince Hudson','#c4a1db']];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),num=n=>n==null?'—':new Intl.NumberFormat('en-US',{maximumFractionDigits:1}).format(n),signed=n=>n==null?'—':(n>0?'+':'')+num(n),compact=n=>new Intl.NumberFormat('en-US',{notation:'compact',maximumFractionDigits:1}).format(n);
-const params=new URLSearchParams(location.hash.slice(1));let range=['7','30','365','all'].includes(params.get('range'))?params.get('range'):'7',visible=new Set(params.has('kins')?params.get('kins').split(','):kins.map(k=>k[0]));visible.add('YCF2R');let data,events=[],eventError='',latest;
+const params=new URLSearchParams(location.hash.slice(1));let range=['7','30','365','all'].includes(params.get('range'))?params.get('range'):'7',visible=new Set(params.has('kins')&&!params.get('kins').split(',').some(id=>['RKH4I','TWHFG','78ZO7','4XDPE','6YMWL','P74I0'].includes(id))?params.get('kins').split(',').filter(id=>kins.some(k=>k[0]===id)):kins.map(k=>k[0]));visible.add('YCF2R');let data,events=[],eventError='',latest;
 if(['interactions','creations'].includes(params.get('measure')))$('measure').value=params.get('measure');if(['gains','total','pace'].includes(params.get('view')))$('view').value=params.get('view');$('markers').checked=params.get('markers')!=='0';
 function delta(a,b,field){return KinMetrics.intervalGain(a,b,field);}
 function stats(id,period=range){return KinMetrics.windowStats(data,id,period);}
