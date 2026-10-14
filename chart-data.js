@@ -91,7 +91,7 @@
     const adjusted=project(series(data,id,key,true),key,mode,start);
     adjusted.points=adjusted.points.map((p,i)=>({...p,raw:raw.points[i].v}));return adjusted;
   }
-  function tint(hex){return '#'+hex.slice(1).match(/../g).map(v=>Math.round(parseInt(v,16)*.8).toString(16).padStart(2,'0')).join('');}
+  function tint(hex){const accents={'#b8e6c0':'#25c77b','#7faecc':'#3788ff','#e0b880':'#ff8a30','#c4a1db':'#aa62ff','#66dec2':'#169f88','#b49aff':'#854af5','#ffba76':'#ee761f','#78b6ff':'#297bea'};return accents[hex.toLowerCase()]||hex;}
   function paths(points,x,y){
     const result={recorded:'',estimated:''};let prev=null;
     for(const p of points){if(p.v==null){prev=null;continue;}if(prev&&!p.break){const key=p.estimated||prev.estimated?'estimated':'recorded';result[key]+=`M${x(prev.t)},${y(prev.v)}L${x(p.t)},${y(p.v)} `;}prev=p;}
@@ -100,7 +100,7 @@
   function note(data,key,start,end,smooth){
     const events=analyze(data)[key].filter(e=>Date.parse(data.snapshots[e.last].at)>=start&&Date.parse(data.snapshots[e.first].at)<=end);
     const confirmed=events.filter(e=>!e.pending).length,pending=events.some(e=>e.pending);
-    return (smooth?'Slightly darker sections are estimates: delayed gains are spread over elapsed time. Recorded totals, tables and exports are unchanged. ':'Showing recorded values. ')+(confirmed?`${confirmed} likely shared update delay${confirmed===1?'':'s'} detected in this range. `:'No confirmed shared update delays in this range. ')+(pending?'Latest shared stall is awaiting a catch-up reading; no estimate is made yet.':'');
+    return (smooth?'The stronger accent color marks estimates: delayed gains are spread over elapsed time. Recorded totals, tables and exports are unchanged. ':'Showing recorded values. ')+(confirmed?`${confirmed} likely shared update delay${confirmed===1?'':'s'} detected in this range. `:'No confirmed shared update delays in this range. ')+(pending?'Latest shared stall is awaiting a catch-up reading; no estimate is made yet.':'');
   }
   const api={analyze,series,points,tint,paths,note};
   if(typeof module!=='undefined')module.exports=api;else root.KinChart=api;
