@@ -1,1 +1,1 @@
-{"checkedAt":"2026-10-14T00:46:27.344Z","lastAttempt":"2026-10-14T00:45:45.291Z","lastSuccess":"2026-10-14T00:46:20.424Z","outcome":"success","slot":"2026-10-13 17:45 America/Los_Angeles","nextRetry":null,"attempts":1,"error":null}
+{"checkedAt":"2026-10-14T12:46:50.961Z","lastAttempt":"2026-10-14T12:45:38.622Z","lastSuccess":"2026-10-14T00:46:20.424Z","outcome":"failure","slot":"2026-10-14 05:45 America/Los_Angeles","nextRetry":"2026-10-14T13:01:47.316Z","attempts":1,"error":{"at":"2026-10-14T12:46:47.316Z","stage":"discovery-cards-timeout","type":"error"}}
